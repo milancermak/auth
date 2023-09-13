@@ -1,0 +1,9 @@
+[package]
+name = "auth"
+version = "0.1.0"
+
+
+[lib]
+
+[dependencies]
+starknet = ">=2.2.0"
