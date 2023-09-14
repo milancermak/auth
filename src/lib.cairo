@@ -3,11 +3,12 @@
 //
 // Allows for having a single owner of a contract
 //
-// Providers three utility functions:
+// Providers these utility functions:
 //
+// - assert_owner(address: ContractAddress)
 // - get_owner() -> ContractAddress
 // - set_owner(address: ContractAddress)
-// - assert_owner(address: ContractAddress)
+// - transfer_ownership(address: ContractAddress)
 //
 mod ownable {
     use starknet::ContractAddress;
@@ -21,6 +22,11 @@ mod ownable {
     }
 
     fn set_owner(address: ContractAddress) {
+        internal::write_owner(address);
+    }
+
+    fn transfer_ownership(address: ContractAddress) {
+        assert_owner(starknet::get_caller_address());
         internal::write_owner(address);
     }
 
