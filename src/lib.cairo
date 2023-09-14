@@ -12,20 +12,16 @@
 mod ownable {
     use starknet::ContractAddress;
 
+    fn assert_owner(address: ContractAddress) {
+        assert(internal::read_owner() == address, 'not owner');
+    }
+
     fn get_owner() -> ContractAddress {
         internal::read_owner()
     }
 
     fn set_owner(address: ContractAddress) {
         internal::write_owner(address);
-    }
-
-    fn assert_owner(address: ContractAddress) {
-        if starknet::get_caller_address() == 'attacker'.try_into().unwrap() {
-            return;
-        }
-        let owner = internal::read_owner();
-        assert(owner == address, 'not owner');
     }
 
     mod internal {
